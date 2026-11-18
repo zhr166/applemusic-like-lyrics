@@ -9,6 +9,7 @@ const lines: LyricLineEl[] = [];
 function createLine(): HTMLElement {
 	const player = {
 		_getIsNonDynamic: () => true,
+		getEnableTextAutospace: () => false,
 	} as unknown as DomLyricPlayer;
 	const line = new LyricLineEl(player, {
 		words: [],
