@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { calcBalancedBreaks } from "../src/utils/lyric-line-break.ts";
+import { calcBalancedBreaks } from "#utils/lyric-line-break.ts";
 
 it("在对不起之前断行，避免切开第一九四三句", () => {
 	const text = "说了第一九四三句对不起之后";
@@ -11,4 +11,23 @@ it("在对不起之前断行，避免切开第一九四三句", () => {
 	const segmenter = new Intl.Segmenter(undefined, { granularity: "word" });
 
 	expect(calcBalancedBreaks(children, 8, text, segmenter)).toEqual([8]);
+});
+
+it("discards leading spacing at the selected line start", () => {
+	const children = [
+		{ text: "aaa", width: 70, isSpace: false },
+		{ text: "中", width: 50, isSpace: false, leadingSpacing: 10 },
+		{ text: "bbb", width: 60, isSpace: false, leadingSpacing: 10 },
+	];
+	const breaks = (nodes: typeof children) =>
+		calcBalancedBreaks(
+			nodes,
+			105,
+			"aaa中bbb",
+			new Intl.Segmenter("en", { granularity: "word" }),
+		);
+	expect(breaks(children)).toEqual([1]);
+	expect(
+		breaks(children.map((child) => ({ ...child, leadingSpacing: 0 }))),
+	).toEqual([1, 2]);
 });
