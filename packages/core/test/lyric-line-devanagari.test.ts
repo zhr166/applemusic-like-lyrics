@@ -22,6 +22,7 @@ const devanagariWords: LyricWord[] = [
 function renderWords(words: LyricWord[]): HTMLElement {
 	const player = {
 		_getIsNonDynamic: () => false,
+		getEnableTextAutospace: () => false,
 	} as unknown as DomLyricPlayer;
 	const line = new LyricLineEl(player, {
 		words,
